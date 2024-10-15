@@ -4,6 +4,7 @@ import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletRegistration;
 import lk.ijse.multishop.config.WebAppConfig;
 import lk.ijse.multishop.config.WebAppRootConfig;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
