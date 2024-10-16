@@ -1,18 +1,24 @@
 package lk.ijse.multishop.service;
 
 import lk.ijse.multishop.Util.Mapping;
+import lk.ijse.multishop.customObj.CustomerErrorResponse;
+import lk.ijse.multishop.customObj.ItemErrorResponse;
 import lk.ijse.multishop.customObj.ItemResponse;
 import lk.ijse.multishop.dao.ItemDAO;
 import lk.ijse.multishop.dto.impl.CustomerDTO;
 import lk.ijse.multishop.dto.impl.ItemDTO;
 import lk.ijse.multishop.entity.CustomerEntity;
 import lk.ijse.multishop.entity.ItemEntity;
+import lk.ijse.multishop.exeption.CustomerNotFoundException;
 import lk.ijse.multishop.exeption.DataPersistFailedException;
+import lk.ijse.multishop.exeption.ItemNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class ItemServiceImpl implements ItemService {
@@ -31,22 +37,37 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void updateItem(String id, ItemDTO itemDTO) {
+        Optional<ItemEntity> tmpItemEntitybyId = itemDAO.findById(id);
+        if (!tmpItemEntitybyId.isPresent()) throw  new ItemNotFoundException("Item" +
+                " Not Found");
 
+        tmpItemEntitybyId.get().setDescription(itemDTO.getDescription());
+        tmpItemEntitybyId.get().setQuantity(itemDTO.getQuantity());
+        tmpItemEntitybyId.get().setUnit(itemDTO.getUnit());
+        tmpItemEntitybyId.get().setPrice(itemDTO.getPrice());
+        tmpItemEntitybyId.get().setItemPic(itemDTO.getItemPic());
     }
 
     @Override
     public void deleteItem(String id) {
-
+        Optional<ItemEntity> tmpItemEntitybyId = itemDAO.findById(id);
+        if (!tmpItemEntitybyId.isPresent()) throw  new ItemNotFoundException("Item Not Found");
+        itemDAO.deleteById(id);
     }
 
     @Override
     public ItemResponse getSelectedItem(String id) {
-        return null;
+
+        if (itemDAO.existsById(id)) {
+            return mapping.convertToItemDTO(itemDAO.getItemEntityById(id));
+        }
+        return new ItemErrorResponse(0,"Item Not Found");
     }
 
     @Override
     public List<ItemDTO> getAllItems() {
-        return null;
+
+        return mapping.convertToItemDTOList(itemDAO.findAll());
     }
 
     @Override
