@@ -7,6 +7,8 @@ import lk.ijse.multishop.exeption.CustomerNotFoundException;
 import lk.ijse.multishop.exeption.DataPersistFailedException;
 import lk.ijse.multishop.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @CrossOrigin
 public class CustomerController {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
     CustomerService customerService;
@@ -29,6 +32,7 @@ public class CustomerController {
         if (customerDTO == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         try {
             customerService.saveCustomer(customerDTO);
+            logger.info("Customer saved successfully: {}", customerDTO.getId());
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (DataPersistFailedException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
