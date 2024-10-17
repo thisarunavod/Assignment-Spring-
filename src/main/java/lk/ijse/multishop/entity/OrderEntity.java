@@ -1,10 +1,13 @@
 package lk.ijse.multishop.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +16,27 @@ import java.util.List;
 @Data
 
 @Entity
-@Table(name = "item")
-public class ItemEntity {
+@Table(name = "`order`")
+public class OrderEntity {
+
     @Id
-    private String id;
+    private String orderId;
+
+    @Column(name = "description")
     private String description;
-    private double quantity;
-    private String unit;
-    private double price;
-    @Column(columnDefinition = "LONGTEXT")
-    private String itemPic;
+
+    @CreationTimestamp
+    @Column(name = "orderDateTime")
+    private Timestamp orderDateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private CustomerEntity customer;
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
-            mappedBy = "item")
+            mappedBy = "order")
     private List<OrderDetailsEntity> orderDetails = new ArrayList<>();
+
 
 }

@@ -40,7 +40,6 @@ public class ItemController {
             @RequestPart("price") String price,
             @RequestPart("itemPic") MultipartFile itemPic ){
 
-
         try {
             // Handle item picture
             byte[] imageByteCollection = itemPic.getBytes();
@@ -77,7 +76,6 @@ public class ItemController {
 
     @GetMapping(value = "getAllItems",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ItemDTO> getAllItems(){ return itemService.getAllItems(); }
-
     @PatchMapping(value = "/{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateItem(@PathVariable("id") String id ,
                                              @RequestPart("description") String description,
@@ -85,8 +83,6 @@ public class ItemController {
                                              @RequestPart("unit") String unit,
                                              @RequestPart("price") String price,
                                              @RequestPart("itemPic") MultipartFile itemPic ) {
-
-
         try {
             byte[] imageByteCollection = itemPic.getBytes();
             String updateBase64ItemPic = AppUtil.toBase64ProfilePic(imageByteCollection);
@@ -121,4 +117,5 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

@@ -7,8 +7,6 @@ import lk.ijse.multishop.dto.impl.ItemDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-@Service
 public interface ItemService {
     void saveItem(ItemDTO itemDTO);
     void updateItem(String id,ItemDTO itemDTO);
